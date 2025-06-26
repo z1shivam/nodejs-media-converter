@@ -1,15 +1,9 @@
-import express, {
-    Express,
-    Request,
-    Response,
-    NextFunction,
-    urlencoded,
-    json,
-} from "express";
 import cors from "cors";
+import express, { Express, json, Request, Response, urlencoded } from "express";
 import { CONVERTED_DIR, createFolder, PORT } from "./constants";
-import { imgUpload } from "./utils/multer";
 import { doSomethingWithImg } from "./handlers/imgHandler";
+import { doSomethingWithPdf } from "./handlers/pdfHandler";
+import { imgUpload, pdfUpload } from "./utils/multer";
 
 async function main() {
     const app: Express = express();
@@ -27,6 +21,11 @@ async function main() {
         "/img-convert",
         imgUpload.single("uploaded_img"),
         doSomethingWithImg
+    );
+    app.post(
+        "/pdf-convert",
+        pdfUpload.single("uploaded_pdf"),
+        doSomethingWithPdf
     );
 
     app.listen(PORT, () => {

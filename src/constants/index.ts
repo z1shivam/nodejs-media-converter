@@ -10,6 +10,13 @@ export const PORT = process.env.PORT || 8888;
 export const CONVERTED_DIR = path.resolve(__dirname, "..", "..", "converted");
 export const UPLOADED_DIR = path.resolve(__dirname, "..", "..", "uploads");
 export const TEMP_DIR = path.resolve(__dirname, "..", "..", "temp");
+export const PDF_PYTHON_SCRIPT = path.resolve(
+    __dirname,
+    "..",
+    "..",
+    "python",
+    "pdf-to-docx.py"
+);
 export const IMG_TYPES: string[] = [
     "image/jpeg",
     "image/png",
