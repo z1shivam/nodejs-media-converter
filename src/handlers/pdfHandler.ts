@@ -50,14 +50,11 @@ export async function doSomethingWithPdf(
         if (convertTo === "images") {
             const convertedFilePaths = await pdfToImg(reqFilePath);
             downloadLink = convertedFilePaths.map((filePath) =>
-                path.join("/converted", path.relative(CONVERTED_DIR, filePath))
+                `/converted/images/${filePath}`
             );
         } else {
-            const convertedFilePath = await pdfToDocx(reqFilePath);
-            downloadLink = path.join(
-                "/converted",
-                path.relative(CONVERTED_DIR, convertedFilePath)
-            );
+            const convertedFileName = await pdfToDocx(reqFilePath);
+            downloadLink = `/converted/docx/${convertedFileName}`
         }
 
         const responseMessage = {

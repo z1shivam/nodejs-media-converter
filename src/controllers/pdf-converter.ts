@@ -13,9 +13,8 @@ interface PdfConvertOptions {
 
 export async function pdfToImg(inputFilePath: string): Promise<string[]> {
     const outputDir: string = path.join(CONVERTED_DIR, "images");
-    const outputPrefix: string = path.parse(inputFilePath).name;
+    const outputPrefix: string = path.parse(inputFilePath).name.replace("/","").replace(" ","-");
 
-    // Ensure output directory exists
     await fsPromises.mkdir(outputDir, { recursive: true });
 
     const opts: PdfConvertOptions = {
@@ -30,7 +29,7 @@ export async function pdfToImg(inputFilePath: string): Promise<string[]> {
         const files: string[] = await fsPromises.readdir(outputDir);
         const imageFiles: string[] = files
             .filter((file: string) => file.startsWith(outputPrefix))
-            .map((file: string) => path.join(outputDir, file));
+            .map((file: string) => file);
         return imageFiles;
     } catch (err: unknown) {
         throw new Error(
@@ -41,10 +40,9 @@ export async function pdfToImg(inputFilePath: string): Promise<string[]> {
 
 export async function pdfToDocx(inputFilePath: string): Promise<string> {
     const outputDir: string = path.join(CONVERTED_DIR, "docx");
-    const outputFileName: string = `${path.parse(inputFilePath).name}.docx`;
+    const outputFileName: string = `${path.parse(inputFilePath).name.split(" ")[0]}.docx`;
     const outputPath: string = path.join(outputDir, outputFileName);
 
-    // Ensure output directory exists
     await fsPromises.mkdir(outputDir, { recursive: true });
 
     return new Promise((resolve, reject) => {
@@ -66,7 +64,7 @@ export async function pdfToDocx(inputFilePath: string): Promise<string> {
 
         pythonProcess.on("close", (code: number) => {
             if (code === 0) {
-                resolve(outputPath);
+                resolve(outputFileName);
             } else {
                 reject(new Error("Error converting PDF to DOCX"));
             }
